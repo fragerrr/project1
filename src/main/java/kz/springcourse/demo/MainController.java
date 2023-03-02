@@ -39,4 +39,31 @@ public class MainController {
 
     }
 
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable(name = "id") Integer id, Model model){
+        model.addAttribute("person", DBManager.getUser(id));
+        return "edit";
+    }
+
+    @PatchMapping("/{id}/edit")
+    public String update(@PathVariable(name = "id") Integer id, @ModelAttribute @Valid Person person,
+                         BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return "edit";
+        if(DBManager.updateUser(person, id)){
+            return "redirect:/";
+        } else{
+            return "error";
+        }
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable(name = "id") Integer id){
+        if(DBManager.deleteUser(id)){
+            return "redirect:/";
+        } else{
+            return "error";
+        }
+    }
+
 }

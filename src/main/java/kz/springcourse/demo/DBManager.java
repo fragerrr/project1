@@ -92,7 +92,7 @@ public class DBManager {
         return rows > 0;
     }
 
-    public static boolean updateUser(Person person){
+    public static boolean updateUser(Person person, Integer id){
         int rows = 0;
         try{
             PreparedStatement statement = connection.prepareStatement("" +
@@ -101,7 +101,7 @@ public class DBManager {
             statement.setString(1, person.getName());
             statement.setInt(2, person.getAge());
 
-            statement.setInt(3, person.getId());
+            statement.setInt(3, id);
 
             rows = statement.executeUpdate();
 
