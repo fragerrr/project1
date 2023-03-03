@@ -188,15 +188,15 @@ public class DBManager {
         return book;
     }
 
-    public static boolean addBook(Person person){
+    public static boolean addBook(Book book){
         int rows = 0;
         try{
             PreparedStatement statement = connection.prepareStatement("" +
-                    "INSERT INTO people(name, age) values(?,?)");
+                    "INSERT INTO book(name, author, year) values(?,?,?)");
 
-            statement.setString(1, person.getName());
-            statement.setInt(2, person.getAge());
-
+            statement.setString(1, book.getName());
+            statement.setString(2, book.getAuthor());
+            statement.setInt(3, book.getYear());
             rows = statement.executeUpdate();
 
 
@@ -208,14 +208,15 @@ public class DBManager {
         return rows > 0;
     }
 
-    public static boolean updateBook(Person person, Integer id){
+    public static boolean updateBook(Book book, Integer id){
         int rows = 0;
         try{
             PreparedStatement statement = connection.prepareStatement("" +
-                    "UPDATE people SET name = ?, age = ? WHERE id = ?");
+                    "UPDATE book SET name = ?, author = ?, year = ? WHERE id = ?");
 
-            statement.setString(1, person.getName());
-            statement.setInt(2, person.getAge());
+            statement.setString(1, book.getName());
+            statement.setString(2, book.getAuthor());
+            statement.setInt(3, book.getYear());
 
             statement.setInt(3, id);
 
@@ -233,7 +234,7 @@ public class DBManager {
         int rows = 0;
         try{
             PreparedStatement statement = connection.prepareStatement("" +
-                    "DELETE from people where id = ?");
+                    "DELETE from book where id = ?");
 
 
             statement.setInt(1, id);

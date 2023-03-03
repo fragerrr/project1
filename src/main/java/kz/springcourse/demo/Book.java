@@ -3,6 +3,7 @@ package kz.springcourse.demo;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,8 @@ public class Book {
     @NotEmpty(message = "Author name can't be empty")
     @Size(min=2, max=15, message = "Author name should be between 2 and 15 char")
     private String author;
-    @Min(value = 0, message = "Year should be positive number")
+    @NotNull(message = "Year shouldn't be empty")
+    @Min(value = 1, message = "Year should be positive number")
     private Integer year;
     private Integer took_user;
 

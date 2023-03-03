@@ -33,7 +33,7 @@ public class MainController {
         if(bindingResult.hasErrors())
             return "new";
         if(DBManager.addUser(person)){
-            return "redirect:/";
+            return "redirect:/people";
         } else{
             return "error";
         }
@@ -52,7 +52,7 @@ public class MainController {
         if(bindingResult.hasErrors())
             return "edit";
         if(DBManager.updateUser(person, id)){
-            return "redirect:/";
+            return "redirect:/people";
         } else{
             return "error";
         }
@@ -61,7 +61,7 @@ public class MainController {
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable(name = "id") Integer id){
         if(DBManager.deleteUser(id)){
-            return "redirect:/";
+            return "redirect:/people";
         } else{
             return "error";
         }
