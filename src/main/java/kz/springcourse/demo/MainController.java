@@ -7,8 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/people")
 public class MainController {
-    @GetMapping("/")
+    @GetMapping()
     public String main(Model model){
         model.addAttribute("people", DBManager.getUsers());
 

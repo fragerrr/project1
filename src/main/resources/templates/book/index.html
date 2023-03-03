@@ -6,8 +6,8 @@
 </head>
 <body>
     <div>
-        <th:block th:each="person : ${people}">
-            <a th:text="${person.getName()}" th:href="@{'/' + ${person.getId()}}"/>
+        <th:block th:each="book : ${books}">
+            <a th:text="${book.getName()}" th:href="@{'/' + ${book.getId()}}"/>
             <br/>
         </th:block>
     </div>
@@ -15,7 +15,7 @@
     <hr/>
 
     <div>
-        <a th:href="@{'/people/new'}"> Create new person! </a>
+        <a th:href="@{'/book/new'}"> Create new book! </a>
     </div>
 </body>
 </html>

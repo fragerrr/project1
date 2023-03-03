@@ -131,4 +131,120 @@ public class DBManager {
 
         return rows > 0;
     }
+
+    public static List<Book> getBooks(){
+        List<Book> book = new ArrayList<>();
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "SELECT * FROM book");
+
+            ResultSet rs = statement.executeQuery();
+
+            while(rs.next()){
+                book.add(new Book(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("author"),
+                        rs.getInt("year"),
+                        rs.getInt("took_user")
+                ));
+            }
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return book;
+    }
+
+    public static Book getBook(Integer id){
+        Book book = null;
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "SELECT * FROM book " +
+                    "WHERE id = ? ");
+
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+
+            while(rs.next()){
+                book = new Book(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("author"),
+                        rs.getInt("year"),
+                        rs.getInt("took_user")
+                );
+            }
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return book;
+    }
+
+    public static boolean addBook(Person person){
+        int rows = 0;
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "INSERT INTO people(name, age) values(?,?)");
+
+            statement.setString(1, person.getName());
+            statement.setInt(2, person.getAge());
+
+            rows = statement.executeUpdate();
+
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return rows > 0;
+    }
+
+    public static boolean updateBook(Person person, Integer id){
+        int rows = 0;
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "UPDATE people SET name = ?, age = ? WHERE id = ?");
+
+            statement.setString(1, person.getName());
+            statement.setInt(2, person.getAge());
+
+            statement.setInt(3, id);
+
+            rows = statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return rows > 0;
+    }
+
+    public static boolean deleteBook(Integer id){
+        int rows = 0;
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "DELETE from people where id = ?");
+
+
+            statement.setInt(1, id);
+
+            rows = statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return rows > 0;
+    }
 }
