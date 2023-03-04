@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+
 @Controller
 @RequestMapping("/book")
 public class BookController {
@@ -18,7 +19,20 @@ public class BookController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable(name = "id") Integer id, Model model){
-        model.addAttribute("book", DBManager.getBook(id));
+        Book book = DBManager.getBook(id);
+        model.addAttribute("book", book);
+
+        Person person = DBManager.getUser(book.getTook_user());
+
+        if(person == null){
+            model.addAttribute("took", false);
+        } else{
+            model.addAttribute("took", true);
+            model.addAttribute("person", person);
+        }
+
+
+        model.addAttribute("people", DBManager.getUsers());
         return "book/show";
     }
 
@@ -47,11 +61,11 @@ public class BookController {
     }
 
     @PatchMapping("/{id}/edit")
-    public String update(@PathVariable(name = "id") Integer id, @ModelAttribute @Valid Person person,
+    public String update(@PathVariable(name = "id") Integer id, @ModelAttribute @Valid Book book,
                          BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return "book/edit";
-        if(DBManager.updateUser(person, id)){
+        if(DBManager.updateBook(book, id)){
             return "redirect:/book";
         } else{
             return "error";
@@ -60,7 +74,25 @@ public class BookController {
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable(name = "id") Integer id){
-        if(DBManager.deleteUser(id)){
+        if(DBManager.deleteBook(id)){
+            return "redirect:/book";
+        } else{
+            return "error";
+        }
+    }
+
+    @PutMapping("/{id}/take")
+    public String take(@PathVariable(name = "id") Integer id, @ModelAttribute("book") Book book){
+        if(DBManager.updateTookUser(id, book.getTook_user())){
+            return "redirect:/book";
+        } else{
+            return "error";
+        }
+    }
+
+    @PatchMapping("/{id}/take")
+    public String take(@PathVariable(name = "id") Integer id){
+        if(DBManager.deleteTookUser(id)){
             return "redirect:/book";
         } else{
             return "error";

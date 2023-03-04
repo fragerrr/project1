@@ -10,9 +10,18 @@
   <p th:text="${person.getAge()}">age</p>
 
 
+  <th:block th:each="book: ${books}">
+    <p th:if="${person.getId()} == ${book.getTook_user()}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></p>
+  </th:block>
+
+  <div th:if="${took}">User did not take book</div>
+  <br/>
+
   <a th:href="@{'/people/' + ${person.getId()} + '/edit'}">Edit!</a>
 
   <br/>
+
+
 
   <form th:action="@{'/people/' + ${person.getId()} + '/delete'}" th:method="DELETE">
     <input type="submit" value="Delete!">

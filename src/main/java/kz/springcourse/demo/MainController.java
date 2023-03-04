@@ -12,13 +12,20 @@ public class MainController {
     @GetMapping()
     public String main(Model model){
         model.addAttribute("people", DBManager.getUsers());
-
         return "index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable(name = "id") Integer id, Model model){
         model.addAttribute("person", DBManager.getUser(id));
+
+        if(DBManager.getBooksByUserId(id).isEmpty()){
+            model.addAttribute("took", true);
+        } else{
+            model.addAttribute("books", DBManager.getBooksByUserId(id));
+        }
+
+
         return "show";
     }
 

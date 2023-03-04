@@ -217,8 +217,7 @@ public class DBManager {
             statement.setString(1, book.getName());
             statement.setString(2, book.getAuthor());
             statement.setInt(3, book.getYear());
-
-            statement.setInt(3, id);
+            statement.setInt(4, id);
 
             rows = statement.executeUpdate();
 
@@ -248,4 +247,75 @@ public class DBManager {
 
         return rows > 0;
     }
+
+    public static ArrayList<Book> getBooksByUserId(Integer id){
+        ArrayList<Book> books = new ArrayList<>();
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "SELECT * FROM book WHERE took_user=?");
+
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+
+            while(rs.next()){
+                books.add(
+                        new Book(
+                                rs.getInt("id"),
+                                rs.getString("name"),
+                                rs.getString("author"),
+                                rs.getInt("year"),
+                                rs.getInt("took_user")
+                        )
+                );
+            }
+
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return books;
+    }
+
+    public static boolean updateTookUser(Integer book_id, Integer user_id){
+        int rows = 0;
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "UPDATE book SET took_user = ? WHERE id = ?");
+
+            statement.setInt(1, user_id);
+            statement.setInt(2, book_id);
+
+            rows = statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return rows > 0;
+    }
+
+    public static boolean deleteTookUser(Integer book_id){
+        int rows = 0;
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "UPDATE book SET took_user = null WHERE id = ?");
+
+            statement.setInt(1, book_id);
+
+            rows = statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return rows > 0;
+    }
+
+
 }

@@ -11,6 +11,29 @@
   <p th:text="${book.getYear()}">year</p>
 
 
+  <div th:if="${took}">
+    <form th:action="@{'/book/' + ${book.getId()} + '/take'}" th:method="PATCH">
+      <p th:text="'Book taken by ' + ${person.getName()}"></p>
+      <button>Free book</button>
+    </form>
+  </div>
+
+  <div th:if="${!took}">
+    <form th:action="@{'/book/' + ${book.getId()} + '/take'}" th:method="PUT" th:object="${book}">
+      <p>Book don't taken</p>
+      <select th:field="*{took_user}">
+        <th:block th:each="person : ${people}">
+          <option th:value="${person.getId()}" th:text="${person.getName()}">
+          </option>
+        </th:block>
+      </select>
+
+      <button>Assign book</button>
+    </form>
+  </div>
+  <br/>
+
+
   <a th:href="@{'/book/' + ${book.getId()} + '/edit'}">Edit!</a>
 
   <br/>
