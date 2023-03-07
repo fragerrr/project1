@@ -21,7 +21,7 @@
   <div th:if="${!took}">
     <form th:action="@{'/book/' + ${book.getId()} + '/take'}" th:method="PUT" th:object="${book}">
       <p>Book don't taken</p>
-      <select th:field="*{took_user}">
+      <select th:field="*{tookUser}">
         <th:block th:each="person : ${people}">
           <option th:value="${person.getId()}" th:text="${person.getName()}">
           </option>

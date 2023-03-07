@@ -11,7 +11,7 @@
 
 
   <th:block th:each="book: ${books}">
-    <p th:if="${person.getId()} == ${book.getTook_user()}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></p>
+    <p th:if="${person.getId()} == ${book.getTookUser()}" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}"></p>
   </th:block>
 
   <div th:if="${took}">User did not take book</div>
