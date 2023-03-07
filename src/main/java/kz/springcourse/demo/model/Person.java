@@ -5,13 +5,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "people")
-@Data
+@Getter
+@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
@@ -27,4 +29,7 @@ public class Person {
     @Min(value = 0, message = "Age should be greater than 0")
     @Column(name = "age")
     private Integer age;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<Book> books;
 }

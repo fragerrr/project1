@@ -2,13 +2,20 @@ package kz.springcourse.demo.controller;
 
 import jakarta.validation.Valid;
 import kz.springcourse.demo.model.Book;
+
+
+
 import kz.springcourse.demo.service.BookService;
 import kz.springcourse.demo.service.PersonService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.*;
+
+
 
 
 @Controller
@@ -24,28 +31,45 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping()
-    public String main(Model model){
-        model.addAttribute("books", bookService.getBooks());
+    @GetMapping("")
+    public String main(Model model, @RequestParam(name = "number", required = false) Integer page,
+                       @RequestParam(name = "books_per_page", required = false) Integer number_books,
+                       @RequestParam(name = "sort", required = false) boolean sort){
+
+        if(page != null && number_books != null){
+            model.addAttribute("books", bookService.getBookPagination(page, number_books, sort));
+        }  else{
+            model.addAttribute("books", bookService.getBooks(sort));
+        }
+
 
         return "book/index";
     }
 
+    @GetMapping("/search")
+    public String main(Model model, @RequestParam(name = "search", required = false) String search){
+
+        model.addAttribute("books", bookService.getBooksBySearch(search));
+
+        return "book/search";
+    }
+
+
+
+
+
+
     @GetMapping("/{id}")
-    public String show(@PathVariable(name = "id") Integer id, Model model){
+    public String show(@PathVariable(name = "id") Integer id, Model model, @ModelAttribute(name = "book1") Book book1){
         Book book = bookService.getBook(id);
         model.addAttribute("book", book);
 
-        if(book.getTookUser() != null){
-            model.addAttribute("took", true);
-            model.addAttribute("person", personService.getUser(book.getTookUser()));
-
-        } else{
-            model.addAttribute("took", false);
-        }
-
 
         model.addAttribute("people", personService.getUsers());
+
+        System.out.println(id);
+
+
         return "book/show";
     }
 
@@ -87,15 +111,16 @@ public class BookController {
 
     }
 
-    @PutMapping("/{id}/take")
-    public String take(@ModelAttribute("book") Book book){
-        bookService.personTakeBook(book, book.getTookUser());
+    @PostMapping("/{id}/take")
+    public String take(@PathVariable(name = "id") Integer id, @ModelAttribute(name = "book1") Book book){
+
+        bookService.personTakeBook(bookService.getBook(id), book.getOwner());
         return "redirect:/book";
     }
 
     @PatchMapping("/{id}/take")
     public String take(@PathVariable(name = "id") Integer id){
-        bookService.getBook(id).setTookUser(null);
+        bookService.personTakeBook(bookService.getBook(id), null);
         return "redirect:/book";
     }
 }

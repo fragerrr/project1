@@ -6,6 +6,14 @@
 </head>
 <body>
     <div>
+        <form th:action="@{'/book/search'}" method="get">
+            <input type="text" placeholder="search" name="search">
+            <button>SEARCH</button>
+        </form>
+    </div>
+    
+    
+    <div>
         <th:block th:each="book : ${books}">
             <a th:text="${book.getName()}" th:href="@{'/book/' + ${book.getId()}}"/>
             <br/>
@@ -17,5 +25,8 @@
     <div>
         <a th:href="@{'/book/new'}"> Create new book! </a>
     </div>
+
+
+    <a href="/book?sorted_by_year=true"></a>
 </body>
 </html>

@@ -11,26 +11,32 @@
   <p th:text="${book.getYear()}">year</p>
 
 
-  <div th:if="${took}">
+  <div th:if="${book.getOwner()} != null">
     <form th:action="@{'/book/' + ${book.getId()} + '/take'}" th:method="PATCH">
-      <p th:text="'Book taken by ' + ${person.getName()}"></p>
+
+      <p th:text="'Book taken by ' + ${book.getOwner().getName()}"></p>
       <button>Free book</button>
     </form>
   </div>
 
-  <div th:if="${!took}">
-    <form th:action="@{'/book/' + ${book.getId()} + '/take'}" th:method="PUT" th:object="${book}">
+  <div th:if="${book.getOwner()} == null">
+    <form th:action="@{'/book/' + ${book.getId()} + '/take'}" th:method="POST" th:object="${book1}">
+
       <p>Book don't taken</p>
-      <select th:field="*{tookUser}">
+
+      <label for="person">Assign book for: </label>
+
+      <select th:field="*{owner}" id="person">
         <th:block th:each="person : ${people}">
-          <option th:value="${person.getId()}" th:text="${person.getName()}">
-          </option>
+          <option th:value="${person.getId()}" th:text="${person.getName()}"/>
         </th:block>
       </select>
 
       <button>Assign book</button>
     </form>
   </div>
+
+
   <br/>
 
 

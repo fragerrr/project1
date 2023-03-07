@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import kz.springcourse.demo.model.Book;
 import kz.springcourse.demo.model.Person;
 
-import kz.springcourse.demo.service.BookService;
 import kz.springcourse.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +17,12 @@ import java.util.List;
 @RequestMapping("/people")
 public class MainController {
 
-    private final BookService bookService;
+
     private final PersonService personService;
 
     @Autowired
-    public MainController(BookService bookService, PersonService personService) {
+    public MainController(PersonService personService) {
         this.personService = personService;
-        this.bookService = bookService;
     }
 
     @GetMapping()
@@ -35,9 +33,10 @@ public class MainController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable(name = "id") Integer id, Model model){
-        model.addAttribute("person", personService.getUser(id));
+        Person person = personService.getUser(id);
+        model.addAttribute("person", person);
 
-        List<Book> books = bookService.getBooksByUserId(id);
+        List<Book> books = person.getBooks();
         if(books.isEmpty()){
             model.addAttribute("took", true);
         } else{
